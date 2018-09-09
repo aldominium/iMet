@@ -33,16 +33,17 @@
 
 package com.raywenderlich.android.imet.ui.list
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.SearchView
 import android.view.*
+import androidx.navigation.findNavController
 import com.raywenderlich.android.imet.IMetApp
 import com.raywenderlich.android.imet.R
 import com.raywenderlich.android.imet.data.model.People
-import com.raywenderlich.android.imet.ui.add.AddPeopleActivity
-import com.raywenderlich.android.imet.ui.details.PeopleDetailsActivity
 import kotlinx.android.synthetic.main.fragment_peoples_list.*
 
 /**
@@ -54,17 +55,12 @@ class PeoplesListFragment : Fragment(),
     SearchView.OnCloseListener {
 
   private lateinit var searchView: SearchView
+  private lateinit var viewModel: PeoplesListViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setHasOptionsMenu(true)
-  }
-
-  override fun onResume() {
-    super.onResume()
-
-    val people = (activity?.application as IMetApp).getPeopleRepository().getAllPeople()
-    populatePeopleList(people)
+    viewModel = ViewModelProviders.of(this).get(PeoplesListViewModel::class.java)
   }
 
   override fun onCreateView(
@@ -87,10 +83,16 @@ class PeoplesListFragment : Fragment(),
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    // Start observing people list
+    viewModel.getPeopleList().observe(this, Observer<List<People>> { peoples ->
+      peoples?.let {
+        populatePeopleList(peoples)
+      }
+    })
+
     // Navigate to add people
     addFab.setOnClickListener {
-      val addPeopleIntent = Intent(context, AddPeopleActivity::class.java)
-      startActivity(addPeopleIntent)
+      view.findNavController().navigate(R.id.action_peoplesListFragment_to_addPeopleFragment3)
     }
   }
 
@@ -103,6 +105,7 @@ class PeoplesListFragment : Fragment(),
    * Callback for searchView query submit
    */
   override fun onQueryTextSubmit(query: String?): Boolean {
+    viewModel.searchPeople(query!!)
     return true
   }
 
@@ -110,6 +113,8 @@ class PeoplesListFragment : Fragment(),
    * Callback for searchView close
    */
   override fun onClose(): Boolean {
+    viewModel.getAllPeople()
+    searchView.onActionViewCollapsed()
     return true
   }
 
@@ -124,9 +129,11 @@ class PeoplesListFragment : Fragment(),
    * Navigates to people details on item click
    */
   override fun onItemClick(people: People, itemView: View) {
-    val detailsIntent = Intent(context, PeopleDetailsActivity::class.java)
-    detailsIntent.putExtra(getString(R.string.people_id), people.id)
-    startActivity(detailsIntent)
+    val peopleBundle = Bundle().apply {
+      putInt(getString(R.string.people_id), people.id)
+    }
+    view?.findNavController()
+        ?.navigate(R.id.action_peoplesListFragment_to_peopleDetailsFragment, peopleBundle)
   }
 
 }
