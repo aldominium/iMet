@@ -38,7 +38,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
 import androidx.navigation.Navigation
-import com.raywenderlich.android.imet.IMetApp
 import com.raywenderlich.android.imet.R
 import com.raywenderlich.android.imet.data.model.People
 import kotlinx.android.synthetic.main.fragment_add_people.*

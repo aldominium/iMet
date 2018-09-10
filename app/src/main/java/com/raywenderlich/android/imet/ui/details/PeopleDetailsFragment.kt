@@ -40,7 +40,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.raywenderlich.android.imet.IMetApp
 import com.raywenderlich.android.imet.R
 import com.raywenderlich.android.imet.data.model.People
 import kotlinx.android.synthetic.main.fragment_people_details.*

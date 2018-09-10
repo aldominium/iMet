@@ -21,7 +21,6 @@ abstract class PeopleDatabase : RoomDatabase() {
     private const val DB_NAME = "People.db"
     private var INSTANCE: PeopleDatabase? = null
 
-
     // 3
     fun getInstance(application: Application): PeopleDatabase {
       synchronized(PeopleDatabase.lock) {

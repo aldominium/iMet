@@ -35,13 +35,11 @@ package com.raywenderlich.android.imet.ui.list
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.SearchView
 import android.view.*
 import androidx.navigation.findNavController
-import com.raywenderlich.android.imet.IMetApp
 import com.raywenderlich.android.imet.R
 import com.raywenderlich.android.imet.data.model.People
 import kotlinx.android.synthetic.main.fragment_peoples_list.*
@@ -92,7 +90,7 @@ class PeoplesListFragment : Fragment(),
 
     // Navigate to add people
     addFab.setOnClickListener {
-      view.findNavController().navigate(R.id.action_peoplesListFragment_to_addPeopleFragment3)
+      view.findNavController().navigate(R.id.action_peoplesListFragment_to_addPeopleFragment)
     }
   }
 
